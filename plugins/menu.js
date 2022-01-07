@@ -2,35 +2,35 @@ let fs = require('fs')
 let path = require('path')
 let levelling = require('../lib/levelling')
 let tags = {
-    'main': 'Main',
-    'rpg': 'Epic RPG',
-    'game': 'Game',
-    'xp': 'Exp & Limit',
-    'sticker': 'Sticker',
-    'kerang': 'Kerang Ajaib',
-    'quotes': 'Quotes',
-    'admin': 'Admin',
-    'group': 'Group',
-    'premium': 'Premium',
-    'internet': 'Internet',
-    'anonymous': 'Anonymous Chat',
-    'nulis': 'MagerNulis & Logo',
-    'downloader': 'Downloader',
-    'tools': 'Tools',
-    'fun': 'Fun',
-    'database': 'Database',
-    'vote': 'Voting',
-    'absen': 'Absen',
-    'quran': 'Al Qur\'an',
-    'jadibot': 'Jadi Bot',
-    'owner': 'Owner',
-    'host': 'Host',
-    'advanced': 'Advanced',
-    'info': 'Info',
-    '': 'No Category',
+  'main': 'Main',
+  'rpg': 'Epic RPG',
+  'game': 'Game',
+  'xp': 'Exp & Limit',
+  'sticker': 'Sticker',
+  'kerang': 'Kerang Ajaib',
+  'quotes': 'Quotes',
+  'admin': 'Admin',
+  'group': 'Group',
+  'premium': 'Premium',
+  'internet': 'Internet',
+  'anonymous': 'Anonymous Chat',
+  'nulis': 'MagerNulis & Logo',
+  'downloader': 'Downloader',
+  'tools': 'Tools',
+  'fun': 'Fun',
+  'database': 'Database',
+  'vote': 'Voting',
+  'absen': 'Absen',
+  'quran': 'Al Qur\'an',
+  'jadibot': 'Jadi Bot',
+  'owner': 'Owner',
+  'host': 'Host',
+  'advanced': 'Advanced',
+  'info': 'Info',
+  '': 'No Category',
 }
 const defaultMenu = {
-        before: `
+  before: `
 ╭─「 %me 」
 │ %ucapan, %name!
 │
@@ -44,10 +44,10 @@ const defaultMenu = {
 │ %github
 ╰────
 %readmore`.trimStart(),
-        header: '╭─「 %category 」',
-        body: '│ • %cmd %islimit %isPremium',
-        footer: '╰────\n',
-        after: `
+  header: '╭─「 %category 」',
+  body: '│ • %cmd %islimit %isPremium',
+  footer: '╰────\n',
+  after: `
 *%npmname@^%version*
 ${'```%npmdesc```'}
 `,
@@ -90,8 +90,8 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
     }
     let muptime = clockString(_muptime)
     let uptime = clockString(_uptime)
-    let totalreg = Object.keys(global.db.data.users).length
-    let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length
+    let totalreg = Object.keys(global.DATABASE._data.users).length
+    let rtotalreg = Object.values(global.DATABASE._data.users).filter(user => user.registered == true).length
     let help = Object.values(global.plugins).filter(plugin => !plugin.disabled).map(plugin => {
       return {
         help: Array.isArray(plugin.tags) ? plugin.help : [plugin.help],
@@ -141,7 +141,14 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       github: package.homepage ? package.homepage.url || package.homepage : '[unknown github url]',
       name, weton, week, date, dateIslamic, time, totalreg, rtotalreg,
       readmore: readMore
- 
+    }
+    text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
+    let pp = await conn.getProfilePicture(conn.user.jid).catch(_ => path.join(__dirname, '../src/avatar_contact.png'))
+    conn.sendFile(m.chat, pp, 'menu.jpg', text.trim(), m).catch(_ => conn.reply(m.chat, text.trim(), m))
+  } catch (e) {
+    conn.reply(m.chat, 'Maaf, menu sedang error', m)
+    throw e
+  }
 }
 handler.help = ['menu', 'help', '?']
 handler.tags = ['main']
