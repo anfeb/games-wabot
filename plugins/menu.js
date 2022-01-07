@@ -141,10 +141,7 @@ let handler = async (m, { conn, usedPrefix: _p }) => {
       github: package.homepage ? package.homepage.url || package.homepage : '[unknown github url]',
       name, weton, week, date, dateIslamic, time, totalreg, rtotalreg,
       readmore: readMore
-  } catch (e) {
-    conn.reply(m.chat, 'Maaf, menu sedang error', m)
-    throw e
-  }
+ 
 }
 handler.help = ['menu', 'help', '?']
 handler.tags = ['main']
