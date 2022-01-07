@@ -8,7 +8,7 @@ const Readline = require('readline')
 const yargs = require('yargs/yargs')
 const rl = Readline.createInterface(process.stdin, process.stdout)
 
-CFonts.say('Lightweight\nWhatsApp Bot', {
+CFonts.say('anfebn', {
   font: 'chrome',
   align: 'center',
   gradient: ['red', 'magenta']
